@@ -4,6 +4,10 @@ let gallery = await galleryJson.json();
 const categoriesJson = await fetch('http://localhost:5678/api/categories');
 let categories = await categoriesJson.json();
 
+//initialisation page
+generateFilters(categories);
+generateGallery(gallery);
+
 // génération des filtres catégories
 function generateFilters(categories) {
 
@@ -23,7 +27,6 @@ function generateFilters(categories) {
         filterList.appendChild(filterItem);
     };
 };
-generateFilters(categories);
 
 // génération de la galerie
 function generateGallery(gallery) {
@@ -49,5 +52,3 @@ function generateGallery(gallery) {
         galleryItem.appendChild(galleryItemCaption);
     };
 };
-
-generateGallery(gallery);
