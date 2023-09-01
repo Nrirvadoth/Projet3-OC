@@ -8,6 +8,8 @@ let categories = await categoriesJson.json();
 generateFilters(categories);
 generateGallery(gallery);
 
+//filterAll.classList.add("active");
+
 // génération des filtres catégories
 function generateFilters(categories) {
 
@@ -17,12 +19,26 @@ function generateFilters(categories) {
     const filterAll = document.createElement("li");
     filterAll.innerText = "Tous";
 
+    filterAll.addEventListener("click", () => {
+        document.querySelector(".gallery").innerHTML = "";
+        generateGallery(gallery);
+    });
+
     filters.appendChild(filterList);
     filterList.appendChild(filterAll);
 
     for (let i = 0; i < categories.length; i++) {
         
         const filterItem = document.createElement("li");
+
+        filterItem.addEventListener("click", () => {
+            const galleryFiltered = gallery.filter(function (galleryElement) {
+                return galleryElement.categoryId === categories[i].id;
+            });
+            document.querySelector(".gallery").innerHTML = "";
+            generateGallery(galleryFiltered)
+        });
+
         filterItem.innerText = categories[i].name;
         filterList.appendChild(filterItem);
     };
@@ -30,8 +46,6 @@ function generateFilters(categories) {
 
 // génération de la galerie
 function generateGallery(gallery) {
-
-    console.log("test");
 
     for (let i = 0; i < gallery.length; i++) {
 
