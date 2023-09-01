@@ -8,7 +8,7 @@ let categories = await categoriesJson.json();
 generateFilters(categories);
 generateGallery(gallery);
 
-//filterAll.classList.add("active");
+
 
 // génération des filtres catégories
 function generateFilters(categories) {
@@ -18,6 +18,7 @@ function generateFilters(categories) {
     const filterList = document.createElement("ul");
     const filterAll = document.createElement("li");
     filterAll.innerText = "Tous";
+    filterAll.classList.add("active");
 
     filterAll.addEventListener("click", () => {
         document.querySelector(".gallery").innerHTML = "";
@@ -32,9 +33,7 @@ function generateFilters(categories) {
         const filterItem = document.createElement("li");
 
         filterItem.addEventListener("click", () => {
-            const galleryFiltered = gallery.filter(function (galleryElement) {
-                return galleryElement.categoryId === categories[i].id;
-            });
+            const galleryFiltered = gallery.filter((galleryElement) => galleryElement.categoryId === categories[i].id);
             document.querySelector(".gallery").innerHTML = "";
             generateGallery(galleryFiltered)
         });

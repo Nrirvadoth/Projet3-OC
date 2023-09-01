@@ -135,11 +135,33 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
+
+.filters ul {
+	display:flex;
+	justify-content: center;
+	color:#1D6154;
+	gap: 10px;
+	font-size: 16px;
+	font-family: Syne;
+	margin-bottom:30px;
+}
+
+.filters ul li {
+	border: 1px solid #1D6154;
+	border-radius: 60px;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.filters ul li.active, .filters ul li:hover {
+	background-color: #1D6154;
+	color: #fff;
+}
+
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
