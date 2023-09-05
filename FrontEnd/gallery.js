@@ -66,11 +66,11 @@ function addFiltersListener() {
 // génération de la galerie
 function generateGallery(gallery) {
 
+    const sectionGallery = document.querySelector(".gallery");
+
     for (let i = 0; i < gallery.length; i++) {
 
         const item = gallery[i];
-
-        const sectionGallery = document.querySelector(".gallery");
 
         const galleryItem = document.createElement("figure");
         const galleryItemImage = document.createElement("img");
