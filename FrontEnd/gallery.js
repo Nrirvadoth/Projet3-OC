@@ -9,8 +9,6 @@ generateFilters(categories);
 addFiltersListener();
 generateGallery(gallery);
 
-
-
 // génération des filtres catégories
 function generateFilters(categories) {
 
