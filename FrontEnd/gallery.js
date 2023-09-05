@@ -1,13 +1,19 @@
 const galleryJson = await fetch('http://localhost:5678/api/works');
-let gallery = await galleryJson.json();
-
-const categoriesJson = await fetch('http://localhost:5678/api/categories');
-let categories = await categoriesJson.json();
+const gallery = await galleryJson.json();
 
 //initialisation page
-generateFilters(categories);
-addFiltersListener();
+getCategories(gallery);
 generateGallery(gallery);
+
+function getCategories(gallery) {
+    let categories = new Set();
+    for (let i = 0 ; i < gallery.length; i++ ) {
+        categories.add(gallery[i].category.name);
+    };
+    let categoriesName = Array.from(categories);
+    generateFilters(categoriesName);
+    addFiltersListener(categoriesName);
+};
 
 // génération des filtres catégories
 function generateFilters(categories) {
@@ -26,14 +32,14 @@ function generateFilters(categories) {
         
         const filterItem = document.createElement("li");
       
-        filterItem.innerText = categories[i].name;
+        filterItem.innerText = categories[i];
         filterList.appendChild(filterItem);
     };
 };
 
 // eventslisteners filtres
 
-function addFiltersListener() {
+function addFiltersListener(categoriesName) {
     const filters = document.querySelectorAll(".filters ul li");
 
     filters[0].classList.add("active");
@@ -49,7 +55,7 @@ function addFiltersListener() {
                 generateGallery(gallery)
             } else {
             
-            const galleryFiltered = gallery.filter((galleryElement) => galleryElement.categoryId === categories[i-1].id);
+            const galleryFiltered = gallery.filter((galleryElement) => galleryElement.category.name === categoriesName[i-1]);
 
             document.querySelector(".gallery").innerHTML = "";
             generateGallery(galleryFiltered)
