@@ -1,11 +1,15 @@
 const galleryJson = await fetch('http://localhost:5678/api/works');
 const gallery = await galleryJson.json();
-
-console.log(localStorage.getItem("userId"));
+const userLoggedIn = (localStorage.getItem("userId")) ? true : false;
+console.log(userLoggedIn);
 
 //initialisation page
 getCategories(gallery);
 generateGallery(gallery);
+
+if (userLoggedIn) {
+    launchEditionMode();
+}
 
 function getCategories(gallery) {
     let categories = new Set();
@@ -90,4 +94,10 @@ function generateGallery(gallery) {
         galleryItem.appendChild(galleryItemImage);
         galleryItem.appendChild(galleryItemCaption);
     };
+};
+
+//mode édition
+
+function launchEditionMode() {
+
 };
