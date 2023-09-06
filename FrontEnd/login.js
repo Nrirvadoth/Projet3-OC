@@ -19,21 +19,30 @@ async function loginAttempt() {
 
     inputInfos = JSON.stringify(inputInfos);
 
-    const login = await fetch("http://localhost:5678/api/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: inputInfos
-    });
+    try {
+        const login = await fetch("http://localhost:5678/api/users/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: inputInfos
+        });
 
-    document.getElementById("password").value = "";
+        document.getElementById("password").value = "";
 
+        if (!login.ok) {
+            switch (login.status) {
+                case 404:
+                    throw new Error("Utilisateur non reconnu");
+                    break;
+                case 401:
+                    throw new Error("Mot de passe invalide");
+                    break;
+            };
+        };
 
-    if (login.ok) {
-        loginSuccess(login);
-    } else if (login.status === 401) {
-        document.querySelector(".loginError").innerText = "Mot de passe invalide";
-    } else {
-        document.querySelector(".loginError").innerText = "Utilisateur non reconnu";
+        loginSuccess(login)
+
+    } catch (error) {
+        document.querySelector(".loginError").innerText = error.message;
     }
 };
 
