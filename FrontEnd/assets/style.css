@@ -214,6 +214,11 @@ input[type="submit"]{
 	border-radius: 60px ;
 }
 
+.loginError {
+	color:red;
+	text-align:center;margin-bottom: 15px;
+}
+
 .forgotPassword {
 	text-align: center;
 }
