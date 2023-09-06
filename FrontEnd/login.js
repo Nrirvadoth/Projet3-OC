@@ -56,6 +56,6 @@ async function loginSuccess(login) {
 
 function redirectLoggedUser() {
     if (localStorage.getItem('userId')) {
-        window.location.href = "./index.html";
+        window.location.href = "./";
     }
 }
