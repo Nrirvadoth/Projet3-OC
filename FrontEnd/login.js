@@ -1,4 +1,5 @@
-addButtonListener()
+//redirectLoggedUser();
+addButtonListener();
 
 function addButtonListener() {
     const loginButton = document.querySelector("input[type=submit]");
@@ -49,7 +50,12 @@ async function loginAttempt() {
 async function loginSuccess(login) {
     console.log("login successful");
     const user = await login.json();
-
-
-    console.log(user);
+    localStorage.setItem("userId", user.token);
+    redirectLoggedUser();
 };
+
+function redirectLoggedUser() {
+    if (localStorage.getItem('userId')) {
+        window.location.href = "./index.html";
+    }
+}

@@ -1,6 +1,8 @@
 const galleryJson = await fetch('http://localhost:5678/api/works');
 const gallery = await galleryJson.json();
 
+console.log(localStorage.getItem("userId"));
+
 //initialisation page
 getCategories(gallery);
 generateGallery(gallery);
