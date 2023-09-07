@@ -99,5 +99,30 @@ function generateGallery(gallery) {
 //mode édition
 
 function launchEditionMode() {
+    const editWrapper = document.createElement("div");
+    editWrapper.classList.add("edit-wrapper");
+    editWrapper.innerHTML = `<p><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Mode édition | <a href="#">Déconnexion</a></p>`
 
-};
+    const body = document.querySelector("body");
+    const container = document.getElementById("main-container");
+
+    body.insertBefore(editWrapper, container);
+
+    document.querySelector(".edit-wrapper a").addEventListener("click", () => {
+        localStorage.removeItem("userId");
+        location.reload();
+    });
+
+    document.querySelector(".filters").style.visibility = 'hidden';
+   
+    const editButton = document.createElement("span")
+    editButton.classList.add("edit-button");
+    editButton.innerHTML = `<i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Modifier`
+
+/*     const gallery = document.querySelector("#portfolio");
+    const galleryTitle = document.querySelector(".filters");
+
+    gallery.insertBefore(editButton, galleryTitle); */
+
+    document.querySelector(".title").appendChild(editButton);
+}
