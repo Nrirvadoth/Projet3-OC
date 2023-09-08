@@ -32,8 +32,6 @@ async function loginAttempt() {
         if (!login.ok) {
             switch (login.status) {
                 case 404:
-                    throw new Error("Erreur dans l’identifiant ou le mot de passe");
-                    break;
                 case 401:
                     throw new Error("Erreur dans l’identifiant ou le mot de passe");
                     break;
