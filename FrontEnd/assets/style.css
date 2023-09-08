@@ -47,6 +47,8 @@ table {
 	border-spacing: 0;
 }
 /** end reset css**/
+* { box-sizing: border-box; }
+
 body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
@@ -267,4 +269,82 @@ footer nav ul {
 	display:flex;
 	justify-content: center;
 	gap:15px;
+}
+
+.modale-background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	background: rgba(0, 0, 0, 0.5);
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.modale-container {
+	background-color: #fff;
+	width: 600px;
+	border-radius: 10px;
+	padding: 25px 30px;
+}
+
+.modale-main-content {
+	width: 440px;
+	margin: 0 auto;
+}
+
+
+.modale-nav {
+	display:flex;
+	flex-direction: row-reverse;
+	justify-content: space-between;
+	font-size:24px;
+}
+
+.modale-title {
+	font-size: 26px;
+	text-align: center;
+	margin-top:15px;
+}
+
+.gallery-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 40px auto;
+}
+
+.gallery-container img {
+	width: 80px;
+}
+
+.divider {
+	border-bottom: 1px solid #b3b3b3;
+}
+
+.modale-button {
+	border-radius: 50px;
+	background-color:#1D6154;
+	color:#fff;
+	font-size: 15px;
+	font-family: 'Syne';
+	padding: 10px 30px;
+	margin: 15px auto;
+	display: block;
+	border:none;
+    cursor: pointer;
+}
+
+.remove-icon {
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    z-index: 1;
+    position: relative;
+    padding: 3px;
+    width: fit-content;
+    top: 25px;
+    left: 57px;
+    cursor: pointer;
 }

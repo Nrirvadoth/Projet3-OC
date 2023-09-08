@@ -1,5 +1,6 @@
+import { displayModale } from "./popup.js";
 const galleryJson = await fetch('http://localhost:5678/api/works');
-const gallery = await galleryJson.json();
+export const gallery = await galleryJson.json();
 const userLoggedIn = (localStorage.getItem("userId")) ? true : false;
 console.log(userLoggedIn);
 
@@ -119,10 +120,9 @@ function launchEditionMode() {
     editButton.classList.add("edit-button");
     editButton.innerHTML = `<i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Modifier`
 
-/*     const gallery = document.querySelector("#portfolio");
-    const galleryTitle = document.querySelector(".filters");
-
-    gallery.insertBefore(editButton, galleryTitle); */
-
     document.querySelector(".title").appendChild(editButton);
-}
+
+    editButton.addEventListener("click", () => { 
+        displayModale();
+    });
+};
