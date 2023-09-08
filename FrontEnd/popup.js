@@ -73,7 +73,7 @@ function generateModale() {
                 method: "DELETE",
                 headers: { 
                     accept: "*/*",
-                    Authorization: `Bearer ${window.localStorage.getItem("userId")}`
+                    Authorization: `Bearer ${window.localStorage.getItem("userToken")}`
                 }
             });
         });
