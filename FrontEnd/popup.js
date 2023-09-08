@@ -25,14 +25,18 @@ function generateModale() {
     
     const modaleNav = document.createElement("div");
     modaleNav.classList.add("modale-nav");
-    modaleNav.innerHTML = `<i class="fa-solid fa-xmark" aria-hidden="true"></i>`;
-    modaleContainer.appendChild(modaleNav);
 
-    document.querySelector(".fa-xmark").addEventListener("click", () => {
+    const crossIcon = document.createElement("i");
+    crossIcon.classList.add("fa-solid");
+    crossIcon.classList.add("fa-xmark");
+    modaleContainer.appendChild(modaleNav);
+    modaleNav.appendChild(crossIcon);
+
+    crossIcon.addEventListener("click", () => {
         closeModale();
     });
 
-    document.querySelector(".modale-background").addEventListener("click", (event) => {
+    modaleBackground.addEventListener("click", (event) => {
         if (event.target === modaleBackground) {
             closeModale();
         }
