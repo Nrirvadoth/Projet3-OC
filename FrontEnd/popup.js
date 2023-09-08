@@ -1,4 +1,4 @@
-import { gallery } from "./gallery.js";
+import { gallery, generateGallery, updateGallery } from "./gallery.js";
 let modaleCreated = false;
 
 export function displayModale() {
@@ -72,10 +72,11 @@ function generateModale() {
             fetch(workDelete, {
                 method: "DELETE",
                 headers: { 
-                    accept: "*/*",
                     Authorization: `Bearer ${window.localStorage.getItem("userToken")}`
                 }
             });
+            galleryItem.remove();
+            updateGallery();
         });
 
         galleryContainer.appendChild(galleryItem);

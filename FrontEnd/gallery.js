@@ -1,8 +1,15 @@
 import { displayModale } from "./popup.js";
-const galleryJson = await fetch('http://localhost:5678/api/works');
-export const gallery = await galleryJson.json();
+let galleryJson = await fetch('http://localhost:5678/api/works');
+export let gallery = await galleryJson.json();
 const userLoggedIn = (localStorage.getItem("userToken")) ? true : false;
 console.log(userLoggedIn);
+
+export async function updateGallery() {
+    galleryJson = await fetch('http://localhost:5678/api/works');
+    gallery = await galleryJson.json();
+    document.querySelector(".gallery").innerHTML = "";
+    generateGallery(gallery);
+}
 
 //initialisation page
 getCategories(gallery);
@@ -75,7 +82,7 @@ function addFiltersListener(categoriesName) {
 
 
 // génération de la galerie
-function generateGallery(gallery) {
+export function generateGallery(gallery) {
 
     const sectionGallery = document.querySelector(".gallery");
 
