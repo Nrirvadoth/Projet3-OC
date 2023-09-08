@@ -63,6 +63,17 @@ function generateModale() {
         galleryItemImage.src = item.imageUrl;
         galleryItemImage.alt = item.title;
 
+        removeIcon.addEventListener("click", () => {
+            const workDelete = "http://localhost:5678/api/works/" + gallery[i].id;
+            fetch(workDelete, {
+                method: "DELETE",
+                headers: { 
+                    accept: "*/*",
+                    Authorization: `Bearer ${window.localStorage.getItem("userId")}`
+                }
+            });
+        });
+
         galleryContainer.appendChild(galleryItem);
         galleryItem.appendChild(removeIcon);
         galleryItem.appendChild(galleryItemImage);
