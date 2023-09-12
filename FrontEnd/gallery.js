@@ -2,7 +2,6 @@ import { displayModale } from "./popup.js";
 let galleryJson = await fetch('http://localhost:5678/api/works');
 export let gallery = await galleryJson.json();
 const userLoggedIn = (localStorage.getItem("userToken")) ? true : false;
-console.log(userLoggedIn);
 
 export async function updateGallery() {
     galleryJson = await fetch('http://localhost:5678/api/works');

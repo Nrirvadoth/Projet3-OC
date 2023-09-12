@@ -12,49 +12,78 @@ export function displayModale() {
 
 function closeModale() {
     document.querySelector(".modale-background").style.display = "none";
+    modaleStateRemove();
 }
 
 function generateModale() {
+
+    const main = document.querySelector("main");
     const modaleBackground = document.createElement("aside");
     modaleBackground.classList.add("modale-background");
-    const modaleContainer = document.createElement("div");
-    modaleContainer.classList.add("modale-container");
+    main.appendChild(modaleBackground);
 
-    document.querySelector("main").appendChild(modaleBackground);
-    modaleBackground.appendChild(modaleContainer);
+    modaleBackground.innerHTML = `
+        <div class="modale-container">
+            <div class="modale-nav">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </div> 
+            <h3 class="modale-title"></h3>
+            <div class="modale-main-content">
+                <div class="divider"></div>
+                <bouton class="modale-button"></bouton>
+            </div>
+        </div>
+    `;
     
-    const modaleNav = document.createElement("div");
-    modaleNav.classList.add("modale-nav");
-
-    const crossIcon = document.createElement("i");
-    crossIcon.classList.add("fa-solid");
-    crossIcon.classList.add("fa-xmark");
-    modaleContainer.appendChild(modaleNav);
-    modaleNav.appendChild(crossIcon);
-
-    crossIcon.addEventListener("click", () => {
+    document.querySelector(".fa-xmark").addEventListener("click", () => {
         closeModale();
     });
 
     modaleBackground.addEventListener("click", (event) => {
-        if (event.target === modaleBackground) {
+        if (event.target == modaleBackground) {
             closeModale();
         }
     });
 
-    const modaleMainContent = document.createElement("div");
-    modaleMainContent.classList.add("modale-main-content");
-    modaleContainer.appendChild(modaleMainContent);
-    const modaleTitle = document.createElement("h3");
-    modaleTitle.innerText = "Galerie Photo";
-    modaleTitle.classList.add("modale-title");
-    modaleMainContent.append(modaleTitle);
+    modaleStateRemove();
+}
 
-    /* Galerie */
+
+function modaleStateRemove() {
+    if (document.querySelector(".fa-arrow-left")) {
+        document.querySelector(".fa-arrow-left").remove();
+    }
+    document.querySelector(".modale-title").innerText = "Galerie Photo";
+    const button = document.querySelector(".modale-button");
+    button.innerText = "Ajouter une photo";
+    generateModaleGallery(gallery);
+
+    button.addEventListener("click", function modale() {
+        modaleStateAdd(button);
+        this.removeEventListener("click", modale);
+    });
+};
+
+function modaleStateAdd(button) {
+
+    const backIcon = document.createElement("i");
+    backIcon.classList.add("fa-solid", "fa-arrow-left");
+    document.querySelector(".modale-nav").appendChild(backIcon);
+    document.querySelector(".modale-title").innerText = "Ajout Photo";
+    document.querySelector(".gallery-container").remove();
+    button = document.querySelector(".modale-button");
+    button.innerText = "Vérifier";
+
+    backIcon.addEventListener("click", () => {
+        modaleStateRemove();
+    });
+};
+
+function generateModaleGallery(gallery) {
 
     const galleryContainer = document.createElement("div");
     galleryContainer.classList.add("gallery-container");
-
+    
     for (let i = 0; i < gallery.length; i++) {
 
         const item = gallery[i];
@@ -75,8 +104,7 @@ function generateModale() {
                     Authorization: `Bearer ${window.localStorage.getItem("userToken")}`
                 }
             });
-            galleryItem.remove();
-            updateGallery();
+
         });
 
         galleryContainer.appendChild(galleryItem);
@@ -84,18 +112,6 @@ function generateModale() {
         galleryItem.appendChild(galleryItemImage);
     };
 
-    modaleMainContent.appendChild(galleryContainer);
-
-    const divider = document.createElement("div");
-    divider.classList.add("divider");
-    modaleMainContent.appendChild(divider);
-
-    const modaleButton = document.createElement("button");
-    modaleButton.classList.add("modale-button");
-    modaleButton.innerText = "Ajouter une photo";
-    modaleMainContent.appendChild(modaleButton);
+    document.querySelector(".modale-main-content").insertBefore(galleryContainer, document.querySelector(".divider"));
 }
-
-
-
 
