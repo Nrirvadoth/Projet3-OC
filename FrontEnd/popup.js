@@ -1,4 +1,4 @@
-import { gallery, generateGallery, updateGallery } from "./gallery.js";
+import { gallery, updateGallery } from "./gallery.js";
 let modaleCreated = false;
 
 export function displayModale() {
@@ -10,9 +10,9 @@ export function displayModale() {
     }
 }
 
-function closeModale() {
+async function closeModale() {
+    updateGallery();
     document.querySelector(".modale-background").style.display = "none";
-    modaleStateRemove();
 }
 
 function generateModale() {
@@ -49,7 +49,7 @@ function generateModale() {
 }
 
 
-function modaleStateRemove() {
+function modaleStateRemove() {  
     if (document.querySelector(".fa-arrow-left")) {
         document.querySelector(".fa-arrow-left").remove();
     }
@@ -59,19 +59,19 @@ function modaleStateRemove() {
     generateModaleGallery(gallery);
 
     button.addEventListener("click", function modale() {
-        modaleStateAdd(button);
+        modaleStateAdd();
         this.removeEventListener("click", modale);
     });
 };
 
-function modaleStateAdd(button) {
+function modaleStateAdd() {
 
     const backIcon = document.createElement("i");
     backIcon.classList.add("fa-solid", "fa-arrow-left");
     document.querySelector(".modale-nav").appendChild(backIcon);
     document.querySelector(".modale-title").innerText = "Ajout Photo";
     document.querySelector(".gallery-container").remove();
-    button = document.querySelector(".modale-button");
+    const button = document.querySelector(".modale-button");
     button.innerText = "Vérifier";
 
     backIcon.addEventListener("click", () => {
@@ -96,7 +96,8 @@ function generateModaleGallery(gallery) {
         galleryItemImage.src = item.imageUrl;
         galleryItemImage.alt = item.title;
 
-        removeIcon.addEventListener("click", () => {
+        removeIcon.addEventListener("click", async() => {
+            console.log("del")
             const workDelete = "http://localhost:5678/api/works/" + gallery[i].id;
             fetch(workDelete, {
                 method: "DELETE",
@@ -104,7 +105,7 @@ function generateModaleGallery(gallery) {
                     Authorization: `Bearer ${window.localStorage.getItem("userToken")}`
                 }
             });
-
+            galleryItem.remove();
         });
 
         galleryContainer.appendChild(galleryItem);

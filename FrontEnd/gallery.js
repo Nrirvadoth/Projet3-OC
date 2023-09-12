@@ -1,14 +1,7 @@
 import { displayModale } from "./popup.js";
-let galleryJson = await fetch('http://localhost:5678/api/works');
-export let gallery = await galleryJson.json();
+const galleryJson = await fetch('http://localhost:5678/api/works');
+export const gallery = await galleryJson.json();
 const userLoggedIn = (localStorage.getItem("userToken")) ? true : false;
-
-export async function updateGallery() {
-    galleryJson = await fetch('http://localhost:5678/api/works');
-    gallery = await galleryJson.json();
-    document.querySelector(".gallery").innerHTML = "";
-    generateGallery(gallery);
-}
 
 //initialisation page
 getCategories(gallery);
@@ -17,6 +10,13 @@ generateGallery(gallery);
 if (userLoggedIn) {
     launchEditionMode();
 }
+
+export async function updateGallery() {
+    let galleryJson = await fetch('http://localhost:5678/api/works');
+    let gallery = await galleryJson.json();
+    document.querySelector(".gallery").innerHTML = "";
+    generateGallery(gallery);
+};
 
 function getCategories(gallery) {
     let categories = new Set();
