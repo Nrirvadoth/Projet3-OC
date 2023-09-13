@@ -132,13 +132,16 @@ async function addWorkForm() {
     form.classList.add("formModale");
     form.innerHTML = `
         <div class="input-div">
-            <i class="fa-regular fa-image"></i>
-            <label for="photo" class="upload-button">+ Ajouter photo</label>
-            <input type="file" accept=".png, .jpg, .jpeg" size="" name="photo" id="photo">
-            <p class="submit-info">jpg, png : 4Mo max</p>
+            <img id="output">
+            <div class="upload">
+                <i class="fa-regular fa-image"></i>
+                <label for="photo" class="upload-button">+ Ajouter photo</label>
+                <input type="file" accept=".png, .jpg, .jpeg" size="" name="photo" id="photo" class="hide">
+                <p class="submit-info">jpg, png : 4Mo max</p>
+            </div>
         </div>
         <label for="title">Titre</label>
-        <input type="text" id="title" name="title">
+        <input type="text" id="title" name="title"  >
         <label for="category">Categorie</label>
         <select name="category" id="category" name="category">
             ${categoriesList}
@@ -147,9 +150,18 @@ async function addWorkForm() {
     
     document.querySelector(".modale-main-content").insertBefore(form, document.querySelector(".divider"));
 
-/*     document.querySelectorAll(".formModale input").addEventListener("change", () => {
-        if (document.querySelector(".photo") != null &&  document.querySelector(".title") != null) document.querySelector(".modale-button").classList.remove("inactive");
-    }); */
+    document.getElementById("photo").addEventListener("change", (event) => {
+        document.getElementById('output').src = window.URL.createObjectURL(event.target.files[0]);
+        document.querySelector(".upload").style.display = "none";
+        if (document.getElementById("photo").value && document.getElementById("title").value) {
+            document.querySelector(".modale-button").classList.remove("inactive");
+        }
+    });
 
-
+    document.getElementById("title").addEventListener("change", () => {
+        if (document.getElementById("photo").value && document.getElementById("title").value) {
+            document.querySelector(".modale-button").classList.remove("inactive");
+        }
+    });
+    
 };

@@ -200,10 +200,13 @@ input, select {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 	padding: 0 15px;
+	background-color: #fff;
 }
+
 label {
 	margin: 2em 0 1em 0;
 }
+
 textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -226,13 +229,7 @@ input[type="file"] {
 }
 
 .input-div {
-	padding: 30px 0px 30px;
 	background-color:#E8F1F6;
-	display: flex;
-	gap:10px;
-	flex-direction:column;
-	align-items: center;
-	justify-content: center;
 }
 
 .input-div i {
@@ -251,6 +248,15 @@ input[type="file"] {
 	padding: 12px 40px;
 	border-radius: 50px;
 	cursor:pointer;
+}
+
+.upload {
+	padding: 30px 0;
+	display: flex;
+	gap:10px;
+	flex-direction:column;
+	align-items: center;
+	justify-content: center;
 }
 
 .loginError {
@@ -395,4 +401,11 @@ footer nav ul {
 	margin: 40px 0px;
 	display:flex;
 	flex-direction:column;
+}
+
+#output {
+	max-height: 200px;
+	max-width: 300px;
+	display:block;
+	margin: 0 auto;
 }
