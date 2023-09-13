@@ -55,6 +55,7 @@ function modaleStateRemove() {
     }
     document.querySelector(".modale-title").innerText = "Galerie Photo";
     const button = document.querySelector(".modale-button");
+    button.classList.remove("inactive");
     button.innerText = "Ajouter une photo";
     generateModaleGallery(gallery);
 
@@ -72,6 +73,7 @@ function modaleStateAdd() {
     document.querySelector(".modale-title").innerText = "Ajout Photo";
     document.querySelector(".gallery-container").remove();
     const button = document.querySelector(".modale-button");
+    button.classList.add("inactive");
     button.innerText = "Vérifier";
 
     backIcon.addEventListener("click", () => {

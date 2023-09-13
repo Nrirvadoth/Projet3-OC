@@ -342,6 +342,11 @@ footer nav ul {
 	width: fit-content;
 }
 
+.inactive {
+	background-color: #A7A7A7;
+	cursor: default;
+}
+
 .remove-icon {
     background: rgba(0, 0, 0, 0.8);
     color: #fff;
