@@ -114,5 +114,5 @@ function generateModaleGallery(gallery) {
     };
 
     document.querySelector(".modale-main-content").insertBefore(galleryContainer, document.querySelector(".divider"));
-}
+GIT}
 
