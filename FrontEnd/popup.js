@@ -129,14 +129,14 @@ async function addWorkForm() {
     categoriesList += `<option id="${categories[i].id}">${categories[i].name}</option>`
 
     const form = document.createElement("form");
-    form.classList.add("formModale");
+    form.setAttribute("id", "formModale");
     form.innerHTML = `
         <div class="input-div">
             <img id="output">
             <div class="upload">
                 <i class="fa-regular fa-image"></i>
-                <label for="photo" class="upload-button">+ Ajouter photo</label>
-                <input type="file" accept=".png, .jpg, .jpeg" size="" name="photo" id="photo" class="hide">
+                <label for="image" class="upload-button">+ Ajouter photo</label>
+                <input type="file" accept=".png, .jpg, .jpeg" size="" name="image" id="image" class="hide">
                 <p class="submit-info">jpg, png : 4Mo max</p>
             </div>
         </div>
@@ -150,18 +150,36 @@ async function addWorkForm() {
     
     document.querySelector(".modale-main-content").insertBefore(form, document.querySelector(".divider"));
 
-    document.getElementById("photo").addEventListener("change", (event) => {
+    document.getElementById("image").addEventListener("change", (event) => {
         document.getElementById('output').src = window.URL.createObjectURL(event.target.files[0]);
         document.querySelector(".upload").style.display = "none";
-        if (document.getElementById("photo").value && document.getElementById("title").value) {
+        if (document.getElementById("image").value && document.getElementById("title").value) {
             document.querySelector(".modale-button").classList.remove("inactive");
         }
     });
 
     document.getElementById("title").addEventListener("change", () => {
-        if (document.getElementById("photo").value && document.getElementById("title").value) {
+        if (document.getElementById("image").value && document.getElementById("title").value) {
             document.querySelector(".modale-button").classList.remove("inactive");
         }
     });
     
+    document.querySelector(".modale-button").addEventListener("click", async () => {
+        if  (document.querySelector(".modale-button").classList.contains("inactive")) console.log("inactive");
+        else {
+            let formData = new FormData(formModale);
+            console.log(formData);
+            const test = JSON.stringify(formData);
+            console.log(test);
+
+            await fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${window.localStorage.getItem("userToken")}`
+            },
+            body: formData
+        });
+        }
+    });
 };

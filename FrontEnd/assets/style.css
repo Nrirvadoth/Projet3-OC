@@ -397,7 +397,7 @@ footer nav ul {
     cursor: pointer;
 }
 
-.formModale {
+#formModale {
 	margin: 40px 0px;
 	display:flex;
 	flex-direction:column;
