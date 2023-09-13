@@ -50,9 +50,9 @@ function generateModale() {
 
 
 function modaleStateRemove() {  
-    if (document.querySelector(".fa-arrow-left")) {
-        document.querySelector(".fa-arrow-left").remove();
-    }
+    if (document.querySelector(".fa-arrow-left")) document.querySelector(".fa-arrow-left").remove();
+    if (document.querySelector(".formModale")) document.querySelector(".formModale").remove();
+
     document.querySelector(".modale-title").innerText = "Galerie Photo";
     const button = document.querySelector(".modale-button");
     button.classList.remove("inactive");
@@ -75,6 +75,7 @@ function modaleStateAdd() {
     const button = document.querySelector(".modale-button");
     button.classList.add("inactive");
     button.innerText = "Vérifier";
+    addWorkForm();
 
     backIcon.addEventListener("click", () => {
         modaleStateRemove();
@@ -118,3 +119,37 @@ function generateModaleGallery(gallery) {
     document.querySelector(".modale-main-content").insertBefore(galleryContainer, document.querySelector(".divider"));
 }
 
+async function addWorkForm() {
+
+    const categoriesJson = await fetch('http://localhost:5678/api/categories');
+    let categories = await categoriesJson.json();
+
+    let categoriesList = "";
+    for (let i = 0; i < categories.length; i++)
+    categoriesList += `<option id="${categories[i].id}">${categories[i].name}</option>`
+
+    const form = document.createElement("form");
+    form.classList.add("formModale");
+    form.innerHTML = `
+        <div class="input-div">
+            <i class="fa-regular fa-image"></i>
+            <label for="photo" class="upload-button">+ Ajouter photo</label>
+            <input type="file" accept=".png, .jpg, .jpeg" size="" name="photo" id="photo">
+            <p class="submit-info">jpg, png : 4Mo max</p>
+        </div>
+        <label for="title">Titre</label>
+        <input type="text" id="title" name="title">
+        <label for="category">Categorie</label>
+        <select name="category" id="category" name="category">
+            ${categoriesList}
+        </select>
+    `;
+    
+    document.querySelector(".modale-main-content").insertBefore(form, document.querySelector(".divider"));
+
+/*     document.querySelectorAll(".formModale input").addEventListener("change", () => {
+        if (document.querySelector(".photo") != null &&  document.querySelector(".title") != null) document.querySelector(".modale-button").classList.remove("inactive");
+    }); */
+
+
+};
