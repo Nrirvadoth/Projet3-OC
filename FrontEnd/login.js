@@ -46,7 +46,6 @@ async function loginAttempt() {
 };
 
 async function loginSuccess(login) {
-    console.log("login successful");
     const user = await login.json();
     sessionStorage.setItem("userToken", user.token);
     redirectLoggedUser();

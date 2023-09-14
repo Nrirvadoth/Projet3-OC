@@ -100,7 +100,6 @@ function generateModaleGallery(gallery) {
         galleryItemImage.alt = item.title;
 
         removeIcon.addEventListener("click", async() => {
-            console.log("del")
             const workDelete = "http://localhost:5678/api/works/" + gallery[i].id;
             fetch(workDelete, {
                 method: "DELETE",
@@ -196,7 +195,7 @@ async function addWorkForm() {
                 }  
             })
             .then(uploadSuccess());
-            
+
         } catch (error) {
             document.querySelector(".result").innerText = error.message;
         }
