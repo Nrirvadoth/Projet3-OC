@@ -51,7 +51,7 @@ function generateModale() {
 
 function modaleStateRemove() {  
     if (document.querySelector(".fa-arrow-left")) document.querySelector(".fa-arrow-left").remove();
-    if (document.querySelector(".formModale")) document.querySelector(".formModale").remove();
+    if (document.getElementById("formModale")) document.getElementById("formModale").remove();
 
     document.querySelector(".modale-title").innerText = "Galerie Photo";
     const button = document.querySelector(".modale-button");
