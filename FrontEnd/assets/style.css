@@ -414,7 +414,7 @@ footer nav ul {
 	margin: 0 auto;
 }
 
-span.result {
+#result {
     text-align: center;
     padding-bottom: 10px;
 }

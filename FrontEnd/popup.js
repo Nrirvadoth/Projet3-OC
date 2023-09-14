@@ -123,14 +123,14 @@ async function addWorkForm() {
     const categoriesJson = await fetch('http://localhost:5678/api/categories');
     let categories = await categoriesJson.json();
 
-    let categoriesList = "";
+    let categoriesList = `<option value=""></option>`;
     for (let i = 0; i < categories.length; i++)
     categoriesList += `<option value="${categories[i].id}">${categories[i].name}</option>`
     
     const form = document.createElement("form");
     form.setAttribute("id", "formModale");
     form.innerHTML = `
-        <span class="result"></span>
+        <span id ="result"></span>
         <div class="input-div">
             <img id="output">
             <div class="upload">
@@ -150,60 +150,84 @@ async function addWorkForm() {
     
     document.querySelector(".modale-main-content").insertBefore(form, document.querySelector(".divider"));
 
-    document.getElementById("image").addEventListener("change", (event) => {
-        document.querySelector(".result").innerText = "";
+    checkForm();
+};
+
+function checkForm() {
+    image.addEventListener("change", (event) => {
+        result.innerText = "";
         try {
             if (event.target.files[0].size > 4000000) {
+                image.value = "";
                 throw new Error("Le poids de l'image est trop grand")
             } else {
-                document.getElementById('output').src = window.URL.createObjectURL(event.target.files[0]);
+                output.src = window.URL.createObjectURL(event.target.files[0]);
                 document.querySelector(".upload").style.display = "none";
             }
         } catch (error) {
-            document.querySelector(".result").innerText = error.message;
+            result.innerText = error.message;
         }
-
-        if (document.getElementById("image").value && document.getElementById("title").value) {
-            document.querySelector(".modale-button").classList.remove("inactive");
-        }
+        isValid();
     });
 
-    document.getElementById("title").addEventListener("change", () => {
-        document.querySelector(".result").innerText = "";
-        if (document.getElementById("image").value && document.getElementById("title").value) {
-            document.querySelector(".modale-button").classList.remove("inactive");
-        }
-        if (document.getElementById("title").value === "")
-        document.querySelector(".result").innerText = "Saisir un titre";
-    });
-    
-    document.querySelector(".modale-button").addEventListener("click", async () => {
+    title.addEventListener("change", () => {
+        result.innerText = "";
+        const titleRegex = /[a-zA-Z1-9]+/
         try {
-            let formData = new FormData();
-            formData.append("image", image.files[0], image.files[0].name);
-            formData.append("title", title.value);
-            formData.append("category", category.value);
-
-            await fetch("http://localhost:5678/api/works", {
-            method: "POST",
-            headers: { "Authorization": `Bearer ${window.sessionStorage.getItem("userToken")}`},
-            body: formData,
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Erreur lors de l'envoi")
-                }  
-            })
-            .then(uploadSuccess());
-
+            if (!title.value.match(titleRegex)) {
+                throw new Error("Saisir un titre valide")
+            } 
         } catch (error) {
-            document.querySelector(".result").innerText = error.message;
+            result.innerText = error.message;
         }
+        isValid();
     });
+
+    category.addEventListener("change", () => {
+        result.innerText = "";
+        try {
+            if (!category.value) {
+                throw new Error("Sélectionnez une catégorie")
+            } 
+        } catch (error) {
+            result.innerText = error.message;
+        }
+        isValid();
+    });
+}
+
+function isValid() {
+    if (image.value && title.value && category.value) {
+        const button = document.querySelector(".modale-button")
+        button.classList.remove("inactive");
+        button.addEventListener("click", async () => {
+            try {
+                let formData = new FormData();
+                formData.append("image", image.files[0], image.files[0].name);
+                formData.append("title", title.value);
+                formData.append("category", category.value);
+    
+                await fetch("http://localhost:5678/api/works", {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${window.sessionStorage.getItem("userToken")}`},
+                body: formData,
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erreur lors de l'envoi")
+                    }  
+                })
+                .then(uploadSuccess());
+    
+            } catch (error) {
+                result.innerText = error.message;
+            }
+        });
+    };
 };
 
 function uploadSuccess() {
-    document.querySelector(".result").innerText = "L'image a bien été ajoutée à la gallerie";
+    result.innerText = "L'image a bien été ajoutée à la gallerie";
     document.querySelector(".upload").style.display = "flex";
     image.value = "";
     title.value = "";
