@@ -106,20 +106,30 @@ export function generateGallery(gallery) {
 //mode édition
 
 function launchEditionMode() {
+    //bandeau top
     const editWrapper = document.createElement("div");
     editWrapper.classList.add("edit-wrapper");
-    editWrapper.innerHTML = `<p><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Mode édition | <a href="#">Déconnexion</a></p>`
+    editWrapper.innerHTML = `<p><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Mode édition`
 
     const body = document.querySelector("body");
     const container = document.getElementById("main-container");
 
     body.insertBefore(editWrapper, container);
 
-    document.querySelector(".edit-wrapper a").addEventListener("click", () => {
+    //menu
+    const logout = document.getElementById("menu-logout")
+    const login = document.getElementById("menu-login")
+    login.classList.toggle("hide");
+    logout.classList.toggle("hide");
+
+    logout.addEventListener("click", () => {
+        login.classList.toggle("hide");
+        logout.classList.toggle("hide");
         sessionStorage.removeItem("userToken");
-        location.reload();
+        location.reload()
     });
 
+    // filters et edition
     document.querySelector(".filters").style.visibility = 'hidden';
    
     const editButton = document.createElement("span")

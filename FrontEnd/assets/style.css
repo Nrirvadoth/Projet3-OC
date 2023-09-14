@@ -418,3 +418,7 @@ footer nav ul {
     text-align: center;
     padding-bottom: 10px;
 }
+
+.hide {
+	display:none;
+}
