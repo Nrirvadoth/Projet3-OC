@@ -131,12 +131,13 @@ async function addWorkForm() {
     const form = document.createElement("form");
     form.setAttribute("id", "formModale");
     form.innerHTML = `
+        <span class="result"></span>
         <div class="input-div">
             <img id="output">
             <div class="upload">
                 <i class="fa-regular fa-image"></i>
                 <label for="image" class="upload-button">+ Ajouter photo</label>
-                <input type="file" accept=".png, .jpg, .jpeg" size="" name="image" id="image" class="hide">
+                <input type="file" accept=".png, .jpg, .jpeg" size="4000000" name="image" id="image" class="hide">
                 <p class="submit-info">jpg, png : 4Mo max</p>
             </div>
         </div>
@@ -151,32 +152,58 @@ async function addWorkForm() {
     document.querySelector(".modale-main-content").insertBefore(form, document.querySelector(".divider"));
 
     document.getElementById("image").addEventListener("change", (event) => {
-        document.getElementById('output').src = window.URL.createObjectURL(event.target.files[0]);
-        document.querySelector(".upload").style.display = "none";
+        document.querySelector(".result").innerText = "";
+        try {
+            if (event.target.files[0].size > 4000000) {
+                throw new Error("Le poids de l'image est trop grand")
+            } else {
+                document.getElementById('output').src = window.URL.createObjectURL(event.target.files[0]);
+                document.querySelector(".upload").style.display = "none";
+            }
+        } catch (error) {
+            document.querySelector(".result").innerText = error.message;
+        }
+
         if (document.getElementById("image").value && document.getElementById("title").value) {
             document.querySelector(".modale-button").classList.remove("inactive");
         }
     });
 
     document.getElementById("title").addEventListener("change", () => {
+        document.querySelector(".result").innerText = "";
         if (document.getElementById("image").value && document.getElementById("title").value) {
             document.querySelector(".modale-button").classList.remove("inactive");
         }
     });
     
     document.querySelector(".modale-button").addEventListener("click", async () => {
-        if  (document.querySelector(".modale-button").classList.contains("inactive")) console.log("inactive");
-        else {
-            let formData = new FormData();
-            formData.append("image", image.files[0], image.files[0].name);
-            formData.append("title", title.value);
-            formData.append("category", category.value);
+        try {
+            if  (document.querySelector(".modale-button").classList.contains("inactive")) console.log("inactive");
+            else {
+                let formData = new FormData();
+                formData.append("image", image.files[0], image.files[0].name);
+                formData.append("title", title.value);
+                formData.append("category", category.value);
 
-            await fetch("http://localhost:5678/api/works", {
-            method: "POST",
-            headers: { "Authorization": `Bearer ${window.localStorage.getItem("userToken")}`},
-            body: formData,
-        });
+                await fetch("http://localhost:5678/api/works", {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${window.localStorage.getItem("userToken")}`},
+                body: formData,
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erreur lors de l'envoi")
+                    }  
+                })
+                .then(document.querySelector(".result").innerText = "L'image a bien été ajoutée à la gallerie")
+                document.querySelector(".upload").style.display = "flex";
+                image.value = "";
+                title.value = "";
+                output.src = "";
+                document.querySelector(".modale-button").classList.add("inactive");
+            }
+        } catch (error) {
+            document.querySelector(".result").innerText = error.message;
         }
     });
 };

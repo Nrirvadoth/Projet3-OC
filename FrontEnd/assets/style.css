@@ -362,6 +362,8 @@ footer nav ul {
 
 .gallery-container img {
 	width: 80px;
+    height: 110px;
+    object-fit: fill;
 }
 
 .divider {
@@ -410,4 +412,9 @@ footer nav ul {
 	max-width: 300px;
 	display:block;
 	margin: 0 auto;
+}
+
+span.result {
+    text-align: center;
+    padding-bottom: 10px;
 }
