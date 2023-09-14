@@ -381,7 +381,8 @@ footer nav ul {
 	display: block;
 	border:none;
     cursor: pointer;
-	width: fit-content;
+	width: 220px;
+    text-align: center;
 }
 
 .inactive {
