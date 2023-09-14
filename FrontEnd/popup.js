@@ -180,32 +180,34 @@ async function addWorkForm() {
     
     document.querySelector(".modale-button").addEventListener("click", async () => {
         try {
-            if  (document.querySelector(".modale-button").classList.contains("inactive")) console.log("inactive");
-            else {
-                let formData = new FormData();
-                formData.append("image", image.files[0], image.files[0].name);
-                formData.append("title", title.value);
-                formData.append("category", category.value);
+            let formData = new FormData();
+            formData.append("image", image.files[0], image.files[0].name);
+            formData.append("title", title.value);
+            formData.append("category", category.value);
 
-                await fetch("http://localhost:5678/api/works", {
-                method: "POST",
-                headers: { "Authorization": `Bearer ${window.sessionStorage.getItem("userToken")}`},
-                body: formData,
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Erreur lors de l'envoi")
-                    }  
-                })
-                .then(document.querySelector(".result").innerText = "L'image a bien été ajoutée à la gallerie")
-                document.querySelector(".upload").style.display = "flex";
-                image.value = "";
-                title.value = "";
-                output.src = "";
-                document.querySelector(".modale-button").classList.add("inactive");
-            }
+            await fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: { "Authorization": `Bearer ${window.sessionStorage.getItem("userToken")}`},
+            body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erreur lors de l'envoi")
+                }  
+            })
+            .then(uploadSuccess());
+            
         } catch (error) {
             document.querySelector(".result").innerText = error.message;
         }
     });
 };
+
+function uploadSuccess() {
+    document.querySelector(".result").innerText = "L'image a bien été ajoutée à la gallerie";
+    document.querySelector(".upload").style.display = "flex";
+    image.value = "";
+    title.value = "";
+    output.src = "";
+    document.querySelector(".modale-button").classList.add("inactive")
+}
