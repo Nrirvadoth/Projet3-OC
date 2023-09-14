@@ -174,6 +174,8 @@ async function addWorkForm() {
         if (document.getElementById("image").value && document.getElementById("title").value) {
             document.querySelector(".modale-button").classList.remove("inactive");
         }
+        if (document.getElementById("title").value === "")
+        document.querySelector(".result").innerText = "Saisir un titre";
     });
     
     document.querySelector(".modale-button").addEventListener("click", async () => {
