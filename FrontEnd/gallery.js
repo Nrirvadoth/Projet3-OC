@@ -1,7 +1,7 @@
 import { displayModale } from "./popup.js";
 const galleryJson = await fetch('http://localhost:5678/api/works');
 export const gallery = await galleryJson.json();
-const userLoggedIn = (localStorage.getItem("userToken")) ? true : false;
+const userLoggedIn = (sessionStorage.getItem("userToken")) ? true : false;
 
 //initialisation page
 getCategories(gallery);
@@ -116,7 +116,7 @@ function launchEditionMode() {
     body.insertBefore(editWrapper, container);
 
     document.querySelector(".edit-wrapper a").addEventListener("click", () => {
-        localStorage.removeItem("userToken");
+        sessionStorage.removeItem("userToken");
         location.reload();
     });
 

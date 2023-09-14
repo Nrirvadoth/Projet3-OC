@@ -105,7 +105,7 @@ function generateModaleGallery(gallery) {
             fetch(workDelete, {
                 method: "DELETE",
                 headers: { 
-                    Authorization: `Bearer ${window.localStorage.getItem("userToken")}`
+                    Authorization: `Bearer ${window.sessionStorage.getItem("userToken")}`
                 }
             });
             galleryItem.remove();
@@ -189,7 +189,7 @@ async function addWorkForm() {
 
                 await fetch("http://localhost:5678/api/works", {
                 method: "POST",
-                headers: { "Authorization": `Bearer ${window.localStorage.getItem("userToken")}`},
+                headers: { "Authorization": `Bearer ${window.sessionStorage.getItem("userToken")}`},
                 body: formData,
                 })
                 .then(response => {

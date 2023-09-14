@@ -48,12 +48,12 @@ async function loginAttempt() {
 async function loginSuccess(login) {
     console.log("login successful");
     const user = await login.json();
-    localStorage.setItem("userToken", user.token);
+    sessionStorage.setItem("userToken", user.token);
     redirectLoggedUser();
 };
 
 function redirectLoggedUser() {
-    if (localStorage.getItem('userToken')) {
+    if (sessionStorage.getItem('userToken')) {
         window.location.href = "./";
     }
 }
