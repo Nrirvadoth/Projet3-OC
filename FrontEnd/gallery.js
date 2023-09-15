@@ -4,28 +4,26 @@ export const gallery = await galleryJson.json();
 const userLoggedIn = (sessionStorage.getItem("userToken")) ? true : false;
 
 //initialisation page
-getCategories(gallery);
+export const categories = await getCategories();
+generateFilters(categories);
+addFiltersListener(categories);
 generateGallery(gallery);
 
 if (userLoggedIn) {
     launchEditionMode();
 }
 
+async function getCategories() {
+    const categoriesJson = await fetch('http://localhost:5678/api/categories');
+    const cats = await categoriesJson.json();
+    return cats;
+};
+
 export async function updateGallery() {
     let galleryJson = await fetch('http://localhost:5678/api/works');
     let gallery = await galleryJson.json();
     document.querySelector(".gallery").innerHTML = "";
     generateGallery(gallery);
-};
-
-function getCategories(gallery) {
-    let categories = new Set();
-    for (let i = 0 ; i < gallery.length; i++ ) {
-        categories.add(gallery[i].category.name);
-    };
-    let categoriesName = Array.from(categories);
-    generateFilters(categoriesName);
-    addFiltersListener(categoriesName);
 };
 
 // génération des filtres catégories
@@ -45,14 +43,14 @@ function generateFilters(categories) {
         
         const filterItem = document.createElement("li");
       
-        filterItem.innerText = categories[i];
+        filterItem.innerText = categories[i].name;
         filterList.appendChild(filterItem);
     };
 };
 
 // eventslisteners filtres
 
-function addFiltersListener(categoriesName) {
+function addFiltersListener(categories) {
     const filters = document.querySelectorAll(".filters ul li");
 
     filters[0].classList.add("active");
@@ -68,7 +66,7 @@ function addFiltersListener(categoriesName) {
                 generateGallery(gallery)
             } else {
             
-            const galleryFiltered = gallery.filter((galleryElement) => galleryElement.category.name === categoriesName[i-1]);
+            const galleryFiltered = gallery.filter((galleryElement) => galleryElement.category.name === categories[i-1].name);
 
             document.querySelector(".gallery").innerHTML = "";
             generateGallery(galleryFiltered)

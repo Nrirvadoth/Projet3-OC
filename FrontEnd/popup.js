@@ -1,4 +1,4 @@
-import { gallery, updateGallery } from "./gallery.js";
+import { gallery, updateGallery, categories } from "./gallery.js";
 let modaleCreated = false;
 
 export function displayModale() {
@@ -119,10 +119,7 @@ function generateModaleGallery(gallery) {
 }
 
 async function addWorkForm() {
-
-    const categoriesJson = await fetch('http://localhost:5678/api/categories');
-    let categories = await categoriesJson.json();
-
+    
     let categoriesList = `<option value=""></option>`;
     for (let i = 0; i < categories.length; i++)
     categoriesList += `<option value="${categories[i].id}">${categories[i].name}</option>`
