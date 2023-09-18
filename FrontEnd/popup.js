@@ -1,5 +1,23 @@
 import { gallery, updateGallery, categories } from "./gallery.js";
-let modaleCreated = false;
+import { myApi } from "./config.js";
+
+const modale = document.querySelector(".modale-background");
+const modaleTitle = document.querySelector(".modale-title");
+const modaleContent = document.querySelector(".modale-main-content");
+const modaleButton = document.querySelector(".modale-button");
+const closeIcon = document.querySelector(".fa-xmark");
+const backIcon = document.querySelector(".fa-arrow-left");
+const galleryContainer = document.querySelector(".modale-gallery");
+
+closeIcon.addEventListener("click", () => {
+    closeModale();
+});
+
+modale.addEventListener("click", (event) => {
+    if (event.target === modale) {
+        closeModale();
+    }
+});
 
 export function displayModale() {
     if (!modaleCreated) {
@@ -84,7 +102,6 @@ function modaleStateAdd() {
 
 function generateModaleGallery(gallery) {
 
-    const galleryContainer = document.createElement("div");
     galleryContainer.classList.add("gallery-container");
     
     for (let i = 0; i < gallery.length; i++) {
@@ -104,7 +121,7 @@ function generateModaleGallery(gallery) {
             fetch(workDelete, {
                 method: "DELETE",
                 headers: { 
-                    Authorization: `Bearer ${window.sessionStorage.getItem("userToken")}`
+                    Authorization: `Bearer ${myToken}`
                 }
             });
             galleryItem.remove();
@@ -114,8 +131,6 @@ function generateModaleGallery(gallery) {
         galleryItem.appendChild(removeIcon);
         galleryItem.appendChild(galleryItemImage);
     };
-
-    document.querySelector(".modale-main-content").insertBefore(galleryContainer, document.querySelector(".divider"));
 }
 
 async function addWorkForm() {
@@ -206,7 +221,7 @@ function isValid() {
     
                 await fetch("http://localhost:5678/api/works", {
                 method: "POST",
-                headers: { "Authorization": `Bearer ${window.sessionStorage.getItem("userToken")}`},
+                headers: { "Authorization": `Bearer ${myToken}`},
                 body: formData,
                 })
                 .then(response => {
