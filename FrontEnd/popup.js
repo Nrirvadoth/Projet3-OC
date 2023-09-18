@@ -1,91 +1,68 @@
 import { gallery, updateGallery, categories } from "./gallery.js";
-let modaleCreated = false;
+import { myApi } from "./config.js";
+
+const modale = document.querySelector(".modale-background");
+const modaleTitle = document.querySelector(".modale-title");
+const modaleButton = document.querySelector(".modale-button");
+const closeIcon = document.querySelector(".fa-xmark");
+const backIcon = document.querySelector(".fa-arrow-left");
+const galleryContainer = document.querySelector(".modale-gallery");
+const formContainer = document.querySelector(".form-container");
+
+closeIcon.onclick = function() {closeModale()};
+/* closeIcon.onclick = closeModale; */
+backIcon.onclick = function() {modaleStateRemove()};
+
+modale.addEventListener("click", (event) => {
+    if (event.target === modale) {
+        closeModale();
+    }
+});
+
 
 export function displayModale() {
-    if (!modaleCreated) {
-        generateModale();
-        modaleCreated = true
-    } else {
-        document.querySelector(".modale-background").style.display = "flex";
-    }
+    modale.style.display = "flex";
+    modaleStateRemove();
 }
 
 async function closeModale() {
     updateGallery();
-    document.querySelector(".modale-background").style.display = "none";
-}
-
-function generateModale() {
-
-    const main = document.querySelector("main");
-    const modaleBackground = document.createElement("aside");
-    modaleBackground.classList.add("modale-background");
-    main.appendChild(modaleBackground);
-
-    modaleBackground.innerHTML = `
-        <div class="modale-container">
-            <div class="modale-nav">
-                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-            </div> 
-            <h3 class="modale-title"></h3>
-            <div class="modale-main-content">
-                <div class="divider"></div>
-                <bouton class="modale-button"></bouton>
-            </div>
-        </div>
-    `;
-    
-    document.querySelector(".fa-xmark").addEventListener("click", () => {
-        closeModale();
-    });
-
-    modaleBackground.addEventListener("click", (event) => {
-        if (event.target == modaleBackground) {
-            closeModale();
-        }
-    });
-
-    modaleStateRemove();
+    modale.style.display = "none";
 }
 
 
 function modaleStateRemove() {  
-    if (document.querySelector(".fa-arrow-left")) document.querySelector(".fa-arrow-left").remove();
-    if (document.getElementById("formModale")) document.getElementById("formModale").remove();
+    backIcon.classList.add("hide");
+    formContainer.classList.add("hide");
+    galleryContainer.classList.remove("hide");
 
-    document.querySelector(".modale-title").innerText = "Galerie Photo";
-    const button = document.querySelector(".modale-button");
-    button.classList.remove("inactive");
-    button.innerText = "Ajouter une photo";
+
+    modaleTitle.innerText = "Galerie Photo";
+    modaleButton.classList.remove("inactive");
+    modaleButton.innerText = "Ajouter une photo";
     generateModaleGallery(gallery);
 
-    button.addEventListener("click", function modale() {
+    modaleButton.addEventListener("click", function modale() {
         modaleStateAdd();
         this.removeEventListener("click", modale);
     });
 };
 
 function modaleStateAdd() {
+    backIcon.classList.remove("hide");
+    formContainer.classList.remove("hide");
+    galleryContainer.classList.add("hide");
 
-    const backIcon = document.createElement("i");
-    backIcon.classList.add("fa-solid", "fa-arrow-left");
-    document.querySelector(".modale-nav").appendChild(backIcon);
-    document.querySelector(".modale-title").innerText = "Ajout Photo";
-    document.querySelector(".gallery-container").remove();
-    const button = document.querySelector(".modale-button");
-    button.classList.add("inactive");
-    button.innerText = "Vérifier";
+    modaleTitle.innerText = "Ajout Photo";
+    
+    modaleButton.classList.add("inactive");
+    modaleButton.innerText = "Vérifier";
     addWorkForm();
-
-    backIcon.addEventListener("click", () => {
-        modaleStateRemove();
-    });
 };
 
 function generateModaleGallery(gallery) {
 
-    const galleryContainer = document.createElement("div");
-    galleryContainer.classList.add("gallery-container");
+    galleryContainer.innerHTML = "";
     
     for (let i = 0; i < gallery.length; i++) {
 
@@ -100,11 +77,11 @@ function generateModaleGallery(gallery) {
         galleryItemImage.alt = item.title;
 
         removeIcon.addEventListener("click", async() => {
-            const workDelete = "http://localhost:5678/api/works/" + gallery[i].id;
+            const workDelete = `${myApi}/works/${gallery[i].id}`;
             fetch(workDelete, {
                 method: "DELETE",
                 headers: { 
-                    Authorization: `Bearer ${window.sessionStorage.getItem("userToken")}`
+                    Authorization: `Bearer ${myToken}`
                 }
             });
             galleryItem.remove();
@@ -114,11 +91,11 @@ function generateModaleGallery(gallery) {
         galleryItem.appendChild(removeIcon);
         galleryItem.appendChild(galleryItemImage);
     };
-
-    document.querySelector(".modale-main-content").insertBefore(galleryContainer, document.querySelector(".divider"));
 }
 
-async function addWorkForm() {
+function addWorkForm() {
+
+    formContainer.innerHTML= "";
     
     let categoriesList = `<option value=""></option>`;
     for (let i = 0; i < categories.length; i++)
@@ -145,9 +122,9 @@ async function addWorkForm() {
         </select>
     `;
     
-    document.querySelector(".modale-main-content").insertBefore(form, document.querySelector(".divider"));
+    formContainer.appendChild(form);
 
-    checkForm();
+ /*    checkForm(); */
 };
 
 function checkForm() {
@@ -195,18 +172,17 @@ function checkForm() {
 
 function isValid() {
     if (image.value && title.value && category.value) {
-        const button = document.querySelector(".modale-button")
-        button.classList.remove("inactive");
-        button.addEventListener("click", async () => {
+        modaleButton.classList.remove("inactive");
+        modaleButton.addEventListener("click", async () => {
             try {
                 let formData = new FormData();
                 formData.append("image", image.files[0], image.files[0].name);
                 formData.append("title", title.value);
                 formData.append("category", category.value);
     
-                await fetch("http://localhost:5678/api/works", {
+                await fetch(`${myApi}/works`, {
                 method: "POST",
-                headers: { "Authorization": `Bearer ${window.sessionStorage.getItem("userToken")}`},
+                headers: { "Authorization": `Bearer ${myToken}`},
                 body: formData,
                 })
                 .then(response => {
@@ -229,5 +205,5 @@ function uploadSuccess() {
     image.value = "";
     title.value = "";
     output.src = "";
-    document.querySelector(".modale-button").classList.add("inactive")
+    modaleButton.classList.add("inactive")
 }
