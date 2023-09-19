@@ -38,7 +38,7 @@ async function loginAttempt() {
             };
         };
 
-        loginSuccess(login)
+        loginSuccess(login);
 
     } catch (error) {
         document.querySelector(".loginError").innerText = error.message;
