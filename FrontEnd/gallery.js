@@ -1,14 +1,13 @@
 import { myApi, token } from "./config.js";
 import { displayModale } from "./popup.js";
-const galleryJson = await fetch(`${myApi}/works`);
-export const gallery = await galleryJson.json();
 const userLoggedIn = token ? true : false;
 
 //initialisation page
 export const categories = await getCategories();
 generateFilters(categories);
 addFiltersListener(categories);
-generateGallery(gallery);
+/* export const works = await getWorks(); */
+generateGallery();
 
 if (userLoggedIn) {
     launchEditionMode();
@@ -20,11 +19,10 @@ async function getCategories() {
     return cats;
 };
 
-export async function updateGallery() {
-    let galleryJson = await fetch(`${myApi}/works`);
-    let gallery = await galleryJson.json();
-    document.querySelector(".gallery").innerHTML = "";
-    generateGallery(gallery);
+export async function getWorks() {
+    const worksJson = await fetch(`${myApi}/works`);
+    const worksList = await worksJson.json();
+    return worksList;
 };
 
 // génération des filtres catégories
@@ -50,7 +48,6 @@ function generateFilters(categories) {
 };
 
 // eventslisteners filtres
-
 function addFiltersListener(categories) {
     const filters = document.querySelectorAll(".filters ul li");
 
@@ -64,7 +61,7 @@ function addFiltersListener(categories) {
 
             if (i === 0) {        
                 document.querySelector(".gallery").innerHTML = "";
-                generateGallery(gallery)
+                generateGallery(works)
             } else {
             
             const galleryFiltered = gallery.filter((galleryElement) => galleryElement.category.name === categories[i-1].name);
@@ -80,13 +77,15 @@ function addFiltersListener(categories) {
 
 
 // génération de la galerie
-export function generateGallery(gallery) {
+export async function generateGallery() {
 
+    const works = await getWorks();
     const sectionGallery = document.querySelector(".gallery");
+    sectionGallery.innerHTML = "";
 
-    for (let i = 0; i < gallery.length; i++) {
+    for (let i = 0; i < works.length; i++) {
 
-        const item = gallery[i];
+        const item = works[i];
 
         const galleryItem = document.createElement("figure");
         const galleryItemImage = document.createElement("img");

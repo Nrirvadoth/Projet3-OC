@@ -1,4 +1,4 @@
-import { gallery, updateGallery, categories } from "./gallery.js";
+import { getWorks, categories, generateGallery } from "./gallery.js";
 import { myApi, token } from "./config.js";
 
 const modale = document.querySelector(".modale-background");
@@ -10,8 +10,6 @@ const galleryContainer = document.querySelector(".modale-gallery");
 const formContainer = document.querySelector(".form-container");
 
 closeIcon.onclick = function() {closeModale()};
-/* closeIcon.onclick = closeModale; */
-backIcon.onclick = function() {modaleStateRemove()};
 
 modale.addEventListener("click", (event) => {
     if (event.target === modale) {
@@ -19,6 +17,7 @@ modale.addEventListener("click", (event) => {
     }
 });
 
+backIcon.onclick = function() {modaleStateRemove()};
 
 export function displayModale() {
     modale.style.display = "flex";
@@ -26,21 +25,19 @@ export function displayModale() {
 }
 
 async function closeModale() {
-    updateGallery();
+    await generateGallery();
     modale.style.display = "none";
 }
-
 
 function modaleStateRemove() {  
     backIcon.classList.add("hide");
     formContainer.classList.add("hide");
     galleryContainer.classList.remove("hide");
 
-
     modaleTitle.innerText = "Galerie Photo";
     modaleButton.classList.remove("inactive");
     modaleButton.innerText = "Ajouter une photo";
-    generateModaleGallery(gallery);
+    generateModaleGallery();
 
     modaleButton.addEventListener("click", function modale() {
         modaleStateAdd();
@@ -60,13 +57,14 @@ function modaleStateAdd() {
     addWorkForm();
 };
 
-function generateModaleGallery(gallery) {
+async function generateModaleGallery() {
 
+    const works = await getWorks();
     galleryContainer.innerHTML = "";
     
-    for (let i = 0; i < gallery.length; i++) {
+    for (let i = 0; i < works.length; i++) {
 
-        const item = gallery[i];
+        const item = works[i];
         const galleryItem = document.createElement("div");
         const galleryItemImage = document.createElement("img");
         const removeIcon = document.createElement("div");
@@ -77,7 +75,7 @@ function generateModaleGallery(gallery) {
         galleryItemImage.alt = item.title;
 
         removeIcon.addEventListener("click", async() => {
-            const workDelete = `${myApi}/works/${gallery[i].id}`;
+            const workDelete = `${myApi}/works/${works[i].id}`;
             fetch(workDelete, {
                 method: "DELETE",
                 headers: { 
