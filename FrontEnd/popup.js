@@ -62,8 +62,7 @@ function modaleStateAdd() {
 
 function generateModaleGallery(gallery) {
 
-    const galleryContainer = document.createElement("div");
-    galleryContainer.classList.add("gallery-container");
+    galleryContainer.innerHTML = "";
     
     for (let i = 0; i < gallery.length; i++) {
 
