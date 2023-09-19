@@ -1,7 +1,8 @@
+import { myApi } from "./config.js";
 import { displayModale } from "./popup.js";
-const galleryJson = await fetch('http://localhost:5678/api/works');
+const galleryJson = await fetch(`${myApi}/works`);
 export const gallery = await galleryJson.json();
-const userLoggedIn = (sessionStorage.getItem("userToken")) ? true : false;
+const userLoggedIn = (sessionStorage.getItem("token")) ? true : false;
 
 //initialisation page
 export const categories = await getCategories();
@@ -14,13 +15,13 @@ if (userLoggedIn) {
 }
 
 async function getCategories() {
-    const categoriesJson = await fetch('http://localhost:5678/api/categories');
+    const categoriesJson = await fetch(`${myApi}/categories`);
     const cats = await categoriesJson.json();
     return cats;
 };
 
 export async function updateGallery() {
-    let galleryJson = await fetch('http://localhost:5678/api/works');
+    let galleryJson = await fetch(`${myApi}/works`);
     let gallery = await galleryJson.json();
     document.querySelector(".gallery").innerHTML = "";
     generateGallery(gallery);
@@ -123,7 +124,7 @@ function launchEditionMode() {
     logout.addEventListener("click", () => {
         login.classList.toggle("hide");
         logout.classList.toggle("hide");
-        sessionStorage.removeItem("userToken");
+        sessionStorage.removeItem("token");
         location.reload()
     });
 

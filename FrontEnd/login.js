@@ -1,4 +1,4 @@
-//redirectLoggedUser();
+import { myApi } from "./config.js";
 addButtonListener();
 
 function addButtonListener() {
@@ -21,7 +21,7 @@ async function loginAttempt() {
     inputInfos = JSON.stringify(inputInfos);
 
     try {
-        const login = await fetch("http://localhost:5678/api/users/login", {
+        const login = await fetch(`${myApi}/users/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: inputInfos
@@ -47,12 +47,12 @@ async function loginAttempt() {
 
 async function loginSuccess(login) {
     const user = await login.json();
-    sessionStorage.setItem("userToken", user.token);
+    sessionStorage.setItem("token", user.token);
     redirectLoggedUser();
 };
 
 function redirectLoggedUser() {
-    if (sessionStorage.getItem('userToken')) {
+    if (sessionStorage.getItem('token')) {
         window.location.href = "./";
     }
 }
