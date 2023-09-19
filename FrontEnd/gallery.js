@@ -55,21 +55,22 @@ function addFiltersListener(categories) {
 
     for (let i = 0; i < filters.length; i++) {
         filters[i].addEventListener("click", () => {
+            const items = document.querySelectorAll(".portfolio");
+
             for (let j = 0; j < filters.length; j++) {
                 filters[j].classList.remove("active");
-            }
+            };
 
             if (i === 0) {        
-                document.querySelector(".gallery").innerHTML = "";
-                generateGallery(works)
+                for (let z = 0; z < items.length; z++) {
+                    items[z].classList.remove("hide");
+                };
             } else {
-            
-            const galleryFiltered = gallery.filter((galleryElement) => galleryElement.category.name === categories[i-1].name);
-
-            document.querySelector(".gallery").innerHTML = "";
-            generateGallery(galleryFiltered)
-            }
-
+                for (let z = 0; z < items.length; z++) {
+                    items[z].classList.add("hide");
+                    if (items[z].classList.contains(`cat${i}`)) items[z].classList.remove("hide");
+                };
+            };
             filters[i].classList.add("active");
         });
     };
@@ -88,6 +89,7 @@ export async function generateGallery() {
         const item = works[i];
 
         const galleryItem = document.createElement("figure");
+        galleryItem.classList.add("portfolio", `cat${item.categoryId}`);
         const galleryItemImage = document.createElement("img");
         const galleryItemCaption = document.createElement("figcaption");
 
