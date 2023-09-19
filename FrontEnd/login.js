@@ -48,11 +48,5 @@ async function loginAttempt() {
 async function loginSuccess(login) {
     const user = await login.json();
     sessionStorage.setItem("token", user.token);
-    redirectLoggedUser();
+    window.location.href = "./";
 };
-
-function redirectLoggedUser() {
-    if (sessionStorage.getItem('token')) {
-        window.location.href = "./";
-    }
-}

@@ -1,5 +1,5 @@
 import { gallery, updateGallery, categories } from "./gallery.js";
-import { myApi } from "./config.js";
+import { myApi, token } from "./config.js";
 
 const modale = document.querySelector(".modale-background");
 const modaleTitle = document.querySelector(".modale-title");
@@ -82,7 +82,7 @@ function generateModaleGallery(gallery) {
             fetch(workDelete, {
                 method: "DELETE",
                 headers: { 
-                    Authorization: `Bearer ${myToken}`
+                    Authorization: `Bearer ${token}`
                 }
             });
             galleryItem.remove();
@@ -183,7 +183,7 @@ function isValid() {
     
                 await fetch(`${myApi}/works`, {
                 method: "POST",
-                headers: { "Authorization": `Bearer ${myToken}`},
+                headers: { "Authorization": `Bearer ${token}`},
                 body: formData,
                 })
                 .then(response => {

@@ -1,8 +1,8 @@
-import { myApi } from "./config.js";
+import { myApi, token } from "./config.js";
 import { displayModale } from "./popup.js";
 const galleryJson = await fetch(`${myApi}/works`);
 export const gallery = await galleryJson.json();
-const userLoggedIn = (sessionStorage.getItem("token")) ? true : false;
+const userLoggedIn = token ? true : false;
 
 //initialisation page
 export const categories = await getCategories();
