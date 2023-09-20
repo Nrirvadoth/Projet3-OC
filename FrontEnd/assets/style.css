@@ -52,13 +52,13 @@ table {
 body {
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+	background-color: #FFFEF8;
 }
 
 #main-container {
 	max-width: 1140px;
 	margin:auto;
-	min-height:100vh;
-}
+}	
 
 header {
 	display: flex;
@@ -205,8 +205,13 @@ input, select {
 	background-color: #fff;
 }
 
+select {
+	border-right: 16px solid transparent;
+}
+
 label {
 	margin: 2em 0 1em 0;
+	font-weight: 500;
 }
 
 textarea {
@@ -251,11 +256,13 @@ input[type="file"] {
 
 .submit-info {
 	font-size: 11px;
+	color: #444;
 }
 
 .upload-button {
 	margin: 0px;
 	background-color: #B9C5CC;
+	color: #306685;
 	width: fit-content;
 	padding: 12px 40px;
 	border-radius: 50px;
@@ -278,15 +285,19 @@ input[type="file"] {
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	padding: 2em
 }
 
-#footer-login {
-	position: fixed;
+footer {
+	background-color: #fff;
+	width: 100%;
+}
+
+.footer-login {
+	position:fixed;
 	bottom: 0;
 	left: 0;
-	width:100%;
-  }
+}
 
 .edit-wrapper {
 	width: 100%;
