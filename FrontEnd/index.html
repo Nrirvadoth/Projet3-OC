@@ -66,9 +66,29 @@
 					<h3 class="modale-title"></h3>
 					<div class="modale-main-content">
 						<div class="modale-gallery"></div>
-						<div class="form-container"></div>
+						<div class="form-container">
+							<form id="form-modale">
+								<span id ="result"></span>
+								<div class="img-zone">
+									<img class="image-preview">
+									<div class="upload">
+										<i class="fa-regular fa-image"></i>
+										<label for="image" class="upload-button">+ Ajouter photo</label>
+										<input type="file" accept=".png, .jpg, .jpeg" size="4000000" name="image" id="image" class="hide">
+										<p class="submit-info">jpg, png : 4Mo max</p>
+									</div>
+								</div>
+								<label for="title">Titre</label>
+								<input type="text" id="title" name="title">
+								<label for="category">Categorie</label>
+								<select name="category" id="category" name="category">
+									<option value=""></option>
+								</select>
+							</form>
+						</div>
 						<div class="divider"></div>
-						<bouton class="modale-button"></bouton>
+						<bouton class="addword-button modale-button">Ajouter une photo</bouton>
+						<bouton class="sendwork-button modale-button" class="hide">Vérifier</bouton>
 					</div>
 				</div>
 			</aside>

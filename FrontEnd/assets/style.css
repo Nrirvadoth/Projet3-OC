@@ -230,13 +230,23 @@ input[type="file"] {
 	display:none;
 }
 
-.input-div {
+.upload {
 	background-color:#E8F1F6;
+	padding: 30px 0;
+	display: flex;
+	gap:10px;
+	flex-direction:column;
+	align-items: center;
+	justify-content: center;
 }
 
-.input-div i {
+.upload i {
 	color: #B9C5CC;
 	font-size: 76px;
+}
+
+.img-zone {
+	background-color:#E8F1F6;
 }
 
 .submit-info {
@@ -250,15 +260,6 @@ input[type="file"] {
 	padding: 12px 40px;
 	border-radius: 50px;
 	cursor:pointer;
-}
-
-.upload {
-	padding: 30px 0;
-	display: flex;
-	gap:10px;
-	flex-direction:column;
-	align-items: center;
-	justify-content: center;
 }
 
 .loginError {
@@ -402,13 +403,13 @@ footer nav ul {
     cursor: pointer;
 }
 
-#formModale {
+#form-modale {
 	margin: 40px 0px;
 	display:flex;
 	flex-direction:column;
 }
 
-#output {
+.image-preview {
 	max-height: 200px;
 	max-width: 300px;
 	display:block;
@@ -418,6 +419,7 @@ footer nav ul {
 #result {
     text-align: center;
     padding-bottom: 10px;
+	color:red;
 }
 
 .hide {
