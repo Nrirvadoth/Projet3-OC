@@ -131,7 +131,7 @@ function checkForm() {
 
     inputTitle.addEventListener("change", () => {
         result.innerText = "";
-        const titleRegex = /[a-zA-Z1-9]+/
+        const titleRegex = /[a-zA-Z0-9]+/
         try {
             if (!inputTitle.value.match(titleRegex)) {
                 throw new Error("Saisir un titre valide")
