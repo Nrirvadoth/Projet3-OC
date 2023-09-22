@@ -56,22 +56,27 @@ function addFiltersListener() {
     for (let i = 0; i < filters.length; i++) {
         filters[i].addEventListener("click", () => {
             const items = document.querySelectorAll(".portfolio");
-
+            
+            //style filtre actif
             for (let j = 0; j < filters.length; j++) {
                 filters[j].classList.remove("active");
             };
+            filters[i].classList.add("active");
 
+            //affichage des projets selon filtre
             if (i === 0) {        
                 for (let z = 0; z < items.length; z++) {
                     items[z].classList.remove("hide");
                 }
             } else {
                 for (let z = 0; z < items.length; z++) {
-                    items[z].classList.add("hide");
-                    if (items[z].classList.contains(`cat${i}`)) items[z].classList.remove("hide");
+                    if (items[z].dataset.category === `${i}`) {
+                        items[z].classList.remove("hide") ;
+                    } else {
+                        items[z].classList.add("hide");
+                    }
                 }
             }
-            filters[i].classList.add("active");
         });
     }
 }
@@ -89,7 +94,8 @@ export async function generateGallery() {
         const item = works[i];
 
         const galleryItem = document.createElement("figure");
-        galleryItem.classList.add("portfolio", `cat${item.categoryId}`);
+        galleryItem.classList.add("portfolio");
+        galleryItem.dataset.category = item.categoryId;
         const galleryItemImage = document.createElement("img");
         const galleryItemCaption = document.createElement("figcaption");
 
