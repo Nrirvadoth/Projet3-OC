@@ -1,22 +1,31 @@
-import { gallery, updateGallery, categories } from "./gallery.js";
-import { myApi } from "./config.js";
+import { getWorks, categories, generateGallery } from "./gallery.js";
+import { myApi, token } from "./config.js";
 
 const modale = document.querySelector(".modale-background");
 const modaleTitle = document.querySelector(".modale-title");
-const modaleContent = document.querySelector(".modale-main-content");
-const modaleButton = document.querySelector(".modale-button");
+const addWorkButton = document.querySelector(".addword-button");
+const sendWorkButton = document.querySelector(".sendwork-button");
 const closeIcon = document.querySelector(".fa-xmark");
 const backIcon = document.querySelector(".fa-arrow-left");
+const galleryContainer = document.querySelector(".modale-gallery");
+const formContainer = document.querySelector(".form-container");
+const inputImage = document.getElementById("image");
+const inputTitle = document.getElementById("title");
+const inputCategory = document.getElementById("category");
+const imagePreview = document.querySelector(".image-preview");
+const result = document.getElementById("result");
 
-closeIcon.addEventListener("click", () => {
-    closeModale();
-});
+let categoriesCreated;
+
+closeIcon.onclick = closeModale;
 
 modale.addEventListener("click", (event) => {
     if (event.target === modale) {
         closeModale();
     }
-});
+})
+
+backIcon.onclick = modaleStateRemove;
 
 export function displayModale() {
     modale.style.display = "flex";
@@ -24,46 +33,50 @@ export function displayModale() {
 }
 
 async function closeModale() {
-    updateGallery();
+    await generateGallery();
     modale.style.display = "none";
 }
 
 function modaleStateRemove() {  
-    backIcon.style.display = "none";
-    if (document.getElementById("formModale")) document.getElementById("formModale").remove();
+    backIcon.classList.add("hide");
+    formContainer.classList.add("hide");
+    sendWorkButton.classList.add("hide");
+    addWorkButton.classList.remove("hide");
+    galleryContainer.classList.remove("hide");
 
     modaleTitle.innerText = "Galerie Photo";
-    modaleButton.classList.remove("inactive");
-    modaleButton.innerText = "Ajouter une photo";
-    generateModaleGallery(gallery);
+    generateModaleGallery();
 
-    modaleButton.addEventListener("click", function modale() {
-        modaleStateAdd();
-        this.removeEventListener("click", modale);
-    });
-};
+    addWorkButton.onclick = function() {modaleStateAdd()};
+}
 
 function modaleStateAdd() {
-
+    backIcon.classList.remove("hide");
+    formContainer.classList.remove("hide");
+    sendWorkButton.classList.remove("hide");
+    galleryContainer.classList.add("hide");
+    addWorkButton.classList.add("hide");
     modaleTitle.innerText = "Ajout Photo";
-    document.querySelector(".gallery-container").remove();
-    modaleButton.classList.add("inactive");
-    modaleButton.innerText = "Vérifier";
-    addWorkForm();
-
-    backIcon.addEventListener("click", () => {
-        modaleStateRemove();
-    });
-};
-
-function generateModaleGallery(gallery) {
-
-    const galleryContainer = document.createElement("div");
-    galleryContainer.classList.add("gallery-container");
     
-    for (let i = 0; i < gallery.length; i++) {
+    result.innerText = "";
+    clearForm();
 
-        const item = gallery[i];
+    if (!categoriesCreated) {
+        addCategories();
+        categoriesCreated = true;
+    }
+    checkForm();
+    sendWorkButton.onclick = function() {postWork()};
+}
+
+async function generateModaleGallery() {
+
+    const works = await getWorks();
+    galleryContainer.innerHTML = "";
+    
+    for (let i = 0; i < works.length; i++) {
+
+        const item = works[i];
         const galleryItem = document.createElement("div");
         const galleryItemImage = document.createElement("img");
         const removeIcon = document.createElement("div");
@@ -74,11 +87,11 @@ function generateModaleGallery(gallery) {
         galleryItemImage.alt = item.title;
 
         removeIcon.addEventListener("click", async() => {
-            const workDelete = `${myApi}/works/${gallery[i].id}`;
+            const workDelete = `${myApi}/works/${works[i].id}`;
             fetch(workDelete, {
                 method: "DELETE",
                 headers: { 
-                    Authorization: `Bearer ${window.sessionStorage.getItem("userToken")}`
+                    Authorization: `Bearer ${token}`
                 }
             });
             galleryItem.remove();
@@ -87,52 +100,27 @@ function generateModaleGallery(gallery) {
         galleryContainer.appendChild(galleryItem);
         galleryItem.appendChild(removeIcon);
         galleryItem.appendChild(galleryItemImage);
-    };
-
-    modaleContent.insertBefore(galleryContainer, document.querySelector(".divider"));
+    }
 }
 
-async function addWorkForm() {
-    
-    let categoriesList = `<option value=""></option>`;
-    for (let i = 0; i < categories.length; i++)
-    categoriesList += `<option value="${categories[i].id}">${categories[i].name}</option>`
-    
-    const form = document.createElement("form");
-    form.setAttribute("id", "formModale");
-    form.innerHTML = `
-        <span id ="result"></span>
-        <div class="input-div">
-            <img id="output">
-            <div class="upload">
-                <i class="fa-regular fa-image"></i>
-                <label for="image" class="upload-button">+ Ajouter photo</label>
-                <input type="file" accept=".png, .jpg, .jpeg" size="4000000" name="image" id="image" class="hide">
-                <p class="submit-info">jpg, png : 4Mo max</p>
-            </div>
-        </div>
-        <label for="title">Titre</label>
-        <input type="text" id="title" name="title"  >
-        <label for="category">Categorie</label>
-        <select name="category" id="category" name="category">
-            ${categoriesList}
-        </select>
-    `;
-    
-    modaleContent.insertBefore(form, document.querySelector(".divider"));
-
-    checkForm();
-};
+function addCategories() {
+    for (let i = 0; i < categories.length; i++) {
+        const cat = document.createElement("option");
+        cat.innerText = categories[i].name;
+        cat.setAttribute("value", `${categories[i].id}`);
+        inputCategory.appendChild(cat);
+    }
+}
 
 function checkForm() {
-    image.addEventListener("change", (event) => {
+    inputImage.addEventListener("change", (event) => {
         result.innerText = "";
         try {
             if (event.target.files[0].size > 4000000) {
-                image.value = "";
+                inputImage.value = "";
                 throw new Error("Le poids de l'image est trop grand")
             } else {
-                output.src = window.URL.createObjectURL(event.target.files[0]);
+                imagePreview.src = window.URL.createObjectURL(event.target.files[0]);
                 document.querySelector(".upload").style.display = "none";
             }
         } catch (error) {
@@ -141,11 +129,11 @@ function checkForm() {
         isValid();
     });
 
-    title.addEventListener("change", () => {
+    inputTitle.addEventListener("change", () => {
         result.innerText = "";
-        const titleRegex = /[a-zA-Z1-9]+/
+        const titleRegex = /[a-zA-Z0-9]+/
         try {
-            if (!title.value.match(titleRegex)) {
+            if (!inputTitle.value.match(titleRegex)) {
                 throw new Error("Saisir un titre valide")
             } 
         } catch (error) {
@@ -154,10 +142,10 @@ function checkForm() {
         isValid();
     });
 
-    category.addEventListener("change", () => {
+    inputCategory.addEventListener("change", () => {
         result.innerText = "";
         try {
-            if (!category.value) {
+            if (!inputCategory.value) {
                 throw new Error("Sélectionnez une catégorie")
             } 
         } catch (error) {
@@ -168,39 +156,45 @@ function checkForm() {
 }
 
 function isValid() {
-    if (image.value && title.value && category.value) {
-        modaleButton.classList.remove("inactive");
-        modaleButton.addEventListener("click", async () => {
-            try {
-                let formData = new FormData();
-                formData.append("image", image.files[0], image.files[0].name);
-                formData.append("title", title.value);
-                formData.append("category", category.value);
-    
-                await fetch(`${myApi}/works`, {
-                method: "POST",
-                headers: { "Authorization": `Bearer ${window.sessionStorage.getItem("userToken")}`},
-                body: formData,
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Erreur lors de l'envoi")
-                    }  
-                })
-                .then(uploadSuccess());
-    
-            } catch (error) {
-                result.innerText = error.message;
-            }
-        });
-    };
-};
+    if (inputImage.value === "" || inputTitle.value === "" || inputCategory.value === "") sendWorkButton.classList.add("inactive");
+    if (inputImage.value && inputTitle.value && inputCategory.value) sendWorkButton.classList.remove("inactive");
+}
+
+async function postWork() {
+    if (sendWorkButton.classList.contains("inactive")) return;
+    try {
+        let formData = new FormData();
+        formData.append("image", inputImage.files[0], inputImage.files[0].name);
+        formData.append("title", inputTitle.value);
+        formData.append("category", inputCategory.value);
+
+        await fetch(`${myApi}/works`, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${token}`},
+        body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erreur lors de l'envoi")
+            }  
+        })
+        .then(uploadSuccess());
+
+    } catch (error) {
+        result.innerText = error.message;
+    }
+}
 
 function uploadSuccess() {
     result.innerText = "L'image a bien été ajoutée à la gallerie";
+    clearForm();
+}
+
+function clearForm() {
     document.querySelector(".upload").style.display = "flex";
-    image.value = "";
-    title.value = "";
-    output.src = "";
-    modaleButton.classList.add("inactive")
-};
+    inputImage.value = "";
+    inputTitle.value = "";
+    inputCategory.value = "";
+    imagePreview.src = "";
+    sendWorkButton.classList.add("inactive")
+}

@@ -1,15 +1,13 @@
+import { myApi, token } from "./config.js";
 import { displayModale } from "./popup.js";
-import { myApi } from "./config.js";
-
-const galleryJson = await fetch(`${myApi}/works`);
-export const gallery = await galleryJson.json();
-const userLoggedIn = (sessionStorage.getItem("userToken")) ? true : false;
+const userLoggedIn = token ? true : false;
 
 //initialisation page
 export const categories = await getCategories();
 generateFilters(categories);
-addFiltersListener(categories);
-generateGallery(gallery);
+addFiltersListener();
+/* export const works = await getWorks(); */
+generateGallery();
 
 if (userLoggedIn) {
     launchEditionMode();
@@ -19,14 +17,13 @@ async function getCategories() {
     const categoriesJson = await fetch(`${myApi}/categories`);
     const cats = await categoriesJson.json();
     return cats;
-};
+}
 
-export async function updateGallery() {
-    let galleryJson = await fetch(`${myApi}/works`);
-    let gallery = await galleryJson.json();
-    document.querySelector(".gallery").innerHTML = "";
-    generateGallery(gallery);
-};
+export async function getWorks() {
+    const worksJson = await fetch(`${myApi}/works`);
+    const worksList = await worksJson.json();
+    return worksList;
+}
 
 // génération des filtres catégories
 function generateFilters(categories) {
@@ -47,49 +44,58 @@ function generateFilters(categories) {
       
         filterItem.innerText = categories[i].name;
         filterList.appendChild(filterItem);
-    };
-};
+    }
+}
 
 // eventslisteners filtres
-
-function addFiltersListener(categories) {
+function addFiltersListener() {
     const filters = document.querySelectorAll(".filters ul li");
 
     filters[0].classList.add("active");
 
     for (let i = 0; i < filters.length; i++) {
         filters[i].addEventListener("click", () => {
+            const items = document.querySelectorAll(".portfolio");
+            
+            //style filtre actif
             for (let j = 0; j < filters.length; j++) {
                 filters[j].classList.remove("active");
-            }
-
-            if (i === 0) {        
-                document.querySelector(".gallery").innerHTML = "";
-                generateGallery(gallery)
-            } else {
-            
-            const galleryFiltered = gallery.filter((galleryElement) => galleryElement.category.name === categories[i-1].name);
-
-            document.querySelector(".gallery").innerHTML = "";
-            generateGallery(galleryFiltered)
-            }
-
+            };
             filters[i].classList.add("active");
+
+            //affichage des projets selon filtre
+            if (i === 0) {        
+                for (let z = 0; z < items.length; z++) {
+                    items[z].classList.remove("hide");
+                }
+            } else {
+                for (let z = 0; z < items.length; z++) {
+                    if (items[z].dataset.category === `${i}`) {
+                        items[z].classList.remove("hide") ;
+                    } else {
+                        items[z].classList.add("hide");
+                    }
+                }
+            }
         });
-    };
-};
+    }
+}
 
 
 // génération de la galerie
-export function generateGallery(gallery) {
+export async function generateGallery() {
 
+    const works = await getWorks();
     const sectionGallery = document.querySelector(".gallery");
+    sectionGallery.innerHTML = "";
 
-    for (let i = 0; i < gallery.length; i++) {
+    for (let i = 0; i < works.length; i++) {
 
-        const item = gallery[i];
+        const item = works[i];
 
         const galleryItem = document.createElement("figure");
+        galleryItem.classList.add("portfolio");
+        galleryItem.dataset.category = item.categoryId;
         const galleryItemImage = document.createElement("img");
         const galleryItemCaption = document.createElement("figcaption");
 
@@ -100,8 +106,8 @@ export function generateGallery(gallery) {
         sectionGallery.appendChild(galleryItem);
         galleryItem.appendChild(galleryItemImage);
         galleryItem.appendChild(galleryItemCaption);
-    };
-};
+    }
+}
 
 //mode édition
 
@@ -125,7 +131,7 @@ function launchEditionMode() {
     logout.addEventListener("click", () => {
         login.classList.toggle("hide");
         logout.classList.toggle("hide");
-        sessionStorage.removeItem("userToken");
+        sessionStorage.removeItem("token");
         location.reload()
     });
 
@@ -141,4 +147,4 @@ function launchEditionMode() {
     editButton.addEventListener("click", () => { 
         displayModale();
     });
-};
+}
