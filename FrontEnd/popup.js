@@ -17,15 +17,15 @@ const result = document.getElementById("result");
 
 let categoriesCreated;
 
-closeIcon.onclick = function() {closeModale()};
+closeIcon.onclick = closeModale;
 
 modale.addEventListener("click", (event) => {
     if (event.target === modale) {
         closeModale();
     }
-});
+})
 
-backIcon.onclick = function() {modaleStateRemove()};
+backIcon.onclick = modaleStateRemove;
 
 export function displayModale() {
     modale.style.display = "flex";
@@ -48,7 +48,7 @@ function modaleStateRemove() {
     generateModaleGallery();
 
     addWorkButton.onclick = function() {modaleStateAdd()};
-};
+}
 
 function modaleStateAdd() {
     backIcon.classList.remove("hide");
@@ -67,7 +67,7 @@ function modaleStateAdd() {
     }
     checkForm();
     sendWorkButton.onclick = function() {postWork()};
-};
+}
 
 async function generateModaleGallery() {
 
@@ -100,7 +100,7 @@ async function generateModaleGallery() {
         galleryContainer.appendChild(galleryItem);
         galleryItem.appendChild(removeIcon);
         galleryItem.appendChild(galleryItemImage);
-    };
+    }
 }
 
 function addCategories() {
@@ -110,7 +110,7 @@ function addCategories() {
         cat.setAttribute("value", `${categories[i].id}`);
         inputCategory.appendChild(cat);
     }
-};
+}
 
 function checkForm() {
     inputImage.addEventListener("change", (event) => {
@@ -153,12 +153,12 @@ function checkForm() {
         }
         isValid();
     });
-};
+}
 
 function isValid() {
     if (inputImage.value === "" || inputTitle.value === "" || inputCategory.value === "") sendWorkButton.classList.add("inactive");
     if (inputImage.value && inputTitle.value && inputCategory.value) sendWorkButton.classList.remove("inactive");
-};
+}
 
 async function postWork() {
     if (sendWorkButton.classList.contains("inactive")) return;
@@ -182,13 +182,13 @@ async function postWork() {
 
     } catch (error) {
         result.innerText = error.message;
-        };
-};
+    }
+}
 
 function uploadSuccess() {
     result.innerText = "L'image a bien été ajoutée à la gallerie";
     clearForm();
-};
+}
 
 function clearForm() {
     document.querySelector(".upload").style.display = "flex";

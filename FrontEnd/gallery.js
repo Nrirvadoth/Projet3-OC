@@ -5,7 +5,7 @@ const userLoggedIn = token ? true : false;
 //initialisation page
 export const categories = await getCategories();
 generateFilters(categories);
-addFiltersListener(categories);
+addFiltersListener();
 /* export const works = await getWorks(); */
 generateGallery();
 
@@ -17,13 +17,13 @@ async function getCategories() {
     const categoriesJson = await fetch(`${myApi}/categories`);
     const cats = await categoriesJson.json();
     return cats;
-};
+}
 
 export async function getWorks() {
     const worksJson = await fetch(`${myApi}/works`);
     const worksList = await worksJson.json();
     return worksList;
-};
+}
 
 // génération des filtres catégories
 function generateFilters(categories) {
@@ -44,11 +44,11 @@ function generateFilters(categories) {
       
         filterItem.innerText = categories[i].name;
         filterList.appendChild(filterItem);
-    };
-};
+    }
+}
 
 // eventslisteners filtres
-function addFiltersListener(categories) {
+function addFiltersListener() {
     const filters = document.querySelectorAll(".filters ul li");
 
     filters[0].classList.add("active");
@@ -64,17 +64,17 @@ function addFiltersListener(categories) {
             if (i === 0) {        
                 for (let z = 0; z < items.length; z++) {
                     items[z].classList.remove("hide");
-                };
+                }
             } else {
                 for (let z = 0; z < items.length; z++) {
                     items[z].classList.add("hide");
                     if (items[z].classList.contains(`cat${i}`)) items[z].classList.remove("hide");
-                };
-            };
+                }
+            }
             filters[i].classList.add("active");
         });
-    };
-};
+    }
+}
 
 
 // génération de la galerie
@@ -100,8 +100,8 @@ export async function generateGallery() {
         sectionGallery.appendChild(galleryItem);
         galleryItem.appendChild(galleryItemImage);
         galleryItem.appendChild(galleryItemCaption);
-    };
-};
+    }
+}
 
 //mode édition
 
@@ -141,4 +141,4 @@ function launchEditionMode() {
     editButton.addEventListener("click", () => { 
         displayModale();
     });
-};
+}

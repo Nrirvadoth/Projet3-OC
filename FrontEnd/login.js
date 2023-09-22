@@ -8,7 +8,7 @@ function addButtonListener() {
         event.preventDefault();
         loginAttempt();
     });
-};
+}
 
 async function loginAttempt() {
     document.querySelector(".loginError").innerText = "";
@@ -35,18 +35,18 @@ async function loginAttempt() {
                 case 401:
                     throw new Error("Erreur dans l’identifiant ou le mot de passe");
                     break;
-            };
-        };
+            }
+        }
 
         loginSuccess(login);
 
     } catch (error) {
         document.querySelector(".loginError").innerText = error.message;
     }
-};
+}
 
 async function loginSuccess(login) {
     const user = await login.json();
     sessionStorage.setItem("token", user.token);
     window.location.href = "./";
-};
+}
