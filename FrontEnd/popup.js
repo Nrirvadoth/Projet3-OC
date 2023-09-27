@@ -47,7 +47,7 @@ function modaleStateRemove() {
     modaleTitle.innerText = "Galerie Photo";
     generateModaleGallery();
 
-    addWorkButton.onclick = function() {modaleStateAdd()};
+    addWorkButton.onclick = modaleStateAdd;
 }
 
 function modaleStateAdd() {
@@ -66,7 +66,7 @@ function modaleStateAdd() {
         categoriesCreated = true;
     }
     checkForm();
-    sendWorkButton.onclick = function() {postWork()};
+    sendWorkButton.onclick = postWork;
 }
 
 async function generateModaleGallery() {
@@ -186,7 +186,7 @@ async function postWork() {
 }
 
 function uploadSuccess() {
-    result.innerText = "L'image a bien été ajoutée à la gallerie";
+    result.innerText = "L'image a bien été ajoutée à la galerie";
     clearForm();
 }
 

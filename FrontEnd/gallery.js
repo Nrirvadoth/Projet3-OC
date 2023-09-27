@@ -6,7 +6,6 @@ const userLoggedIn = token ? true : false;
 export const categories = await getCategories();
 generateFilters(categories);
 addFiltersListener();
-/* export const works = await getWorks(); */
 generateGallery();
 
 if (userLoggedIn) {
